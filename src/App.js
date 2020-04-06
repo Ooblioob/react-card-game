@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./App.css";
 import Card from "./Card.js";
 import _ from "lodash";
-import confetti from "canvas-confetti";
+import fireConfetti from "./confetti-cannon.js";
 
 const suits = ["C", "S", "H", "D"];
 const numbers = [
@@ -136,43 +136,8 @@ class App extends React.Component {
       this.matchedCards().length === Math.floor(this.state.deckSize / 2) * 2
     ) {
       this.setState({ msg: "You Win!", gameWon: true });
-      this.fireConfetti();
+      fireConfetti();
     }
-  }
-
-  fireConfetti() {
-    this.fire(0.25, {
-      spread: 26,
-      startVelocity: 55
-    });
-    this.fire(0.2, {
-      spread: 60
-    });
-    this.fire(0.35, {
-      spread: 100,
-      decay: 0.91
-    });
-    this.fire(0.1, {
-      spread: 120,
-      startVelocity: 25,
-      decay: 0.92
-    });
-    this.fire(0.1, {
-      spread: 120,
-      startVelocity: 45
-    });
-  }
-
-  fire(particleRatio, opts) {
-    var count = 800;
-    var defaults = {
-      origin: { y: 0.7 }
-    };
-    confetti(
-      Object.assign({}, defaults, opts, {
-        particleCount: Math.floor(count * particleRatio)
-      })
-    );
   }
 
   componentDidMount() {
