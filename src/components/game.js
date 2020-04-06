@@ -2,120 +2,69 @@ import React, { Suspense, lazy } from "react";
 import "./game.css";
 import _ from "lodash";
 import fireConfetti from "../utils/confetti-cannon";
+import { generateCardPairs, shuffleCards } from "../utils/deck";
+import { cardsMatch, allPairsMatched } from "../utils/game-engine";
+import NavBar from "./NavBar";
+import { useAuth0 } from "./../react-auth0-spa";
 
 const Card = lazy(() => import("./card"));
-
-const suits = ["C", "S", "H", "D"];
-const numbers = [
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-  "9",
-  "10",
-  "J",
-  "Q",
-  "K",
-  "A"
-];
-const DECK = suits.map(suit => numbers.map(number => number + suit)).flat();
 
 class Game extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       deckSize: 9,
-      cards: this.generateCardPairs(9),
+      cards: generateCardPairs(9),
+      cardsFlipped: 0,
       msg: "Play the Game!",
       gameWon: false
     };
     this.handleCardClick = this.handleCardClick.bind(this);
-    this.shuffleCards = this.shuffleCards.bind(this);
+    this.handleShuffle = this.handleShuffle.bind(this);
     this.startOver = this.startOver.bind(this);
     this.unflipCards = this.unflipCards.bind(this);
   }
 
-  randomCard(exclusions = []) {
-    let availableCards = DECK.filter(e => !exclusions.includes(e));
-    return availableCards[_.random(availableCards.length - 1)];
-  }
-
-  generateCardPairs(n) {
-    let cards = [];
-    for (let i = 0; i < n; i++) {
-      // ensure each card has a pair (unless odd and the last card)
-      cards.push({
-        id: i,
-        value:
-          i % 2 === 0
-            ? this.randomCard(cards.map(() => cards.value))
-            : cards[i - 1].value,
-        flipped: false,
-        matched: false
-      });
-    }
-    return cards;
-  }
-
-  shuffleCards() {
+  handleShuffle() {
     this.setState(() => {
-      return { cards: _.shuffle(this.state.cards) };
+      return { cards: shuffleCards(this.state.cards) };
     });
   }
 
   handleCardClick(index) {
     let cards = this.state.cards.slice();
-    if (!cards[index].matched && this.numFlippedButUnmatchedCards() < 2) {
-      cards[index].flipped = !cards[index].flipped;
-      this.setState({ cards: cards });
+    let card = cards[index];
+    let count = this.state.cardsFlipped;
+    if (!card.flipped && !card.matched && count < 2) {
+      card.flipped = true;
+      this.setState({ cards: cards, cardsFlipped: count + 1 });
     }
-  }
-
-  flippedButUnMatchedCards() {
-    return this.state.cards.filter(e => e.flipped && !e.matched);
-  }
-
-  numFlippedButUnmatchedCards() {
-    return this.flippedButUnMatchedCards().length;
-  }
-
-  matchedCards() {
-    return this.state.cards.filter(e => e.matched);
   }
 
   checkForMatches() {
-    const matchList = this.flippedButUnMatchedCards();
-    if (matchList.length > 1) {
-      if (matchList.every(e => e.value === matchList[0].value)) {
+    if (cardsMatch(this.state.cards)) {
+      let cards = this.state.cards.slice();
+      // all flipped cards are a match, so we can take this shortcut
+      cards.forEach(e => {
+        e.matched = e.flipped;
+      });
+      this.setState({ cards: cards });
+    } else if (this.state.cardsFlipped > 1) {
+      _.delay(() => {
         let cards = this.state.cards.slice();
-        cards.forEach(e => {
-          // all flipped cards are a match, so we can take this shortcut
-          e.matched = e.flipped;
-        });
-        this.setState({ cards: cards });
-      } else {
-        _.delay(() => {
-          let cards = this.state.cards.slice();
-          // only unflip the non-matched cards
-          cards.forEach(e => (e.flipped = e.matched));
-          this.setState({ cards: cards });
-        }, 1000);
-      }
+        // only unflip the non-matched cards
+        cards.forEach(e => (e.flipped = e.matched));
+        this.setState({ cards: cards, cardsFlipped: 0 });
+      }, 1000);
     }
-  }
-
-  drawNewCards() {
-    return this.generateCardPairs(this.state.deckSize);
   }
 
   startOver() {
     this.unflipCards();
     _.delay(() => {
       this.setState({
-        cards: _.shuffle(this.drawNewCards()),
+        cards: generateCardPairs(this.state.deckSize),
         gameWon: false,
         msg: "Play the Game!"
       });
@@ -128,22 +77,18 @@ class Game extends React.Component {
       e.matched = false;
       return e;
     });
-    this.setState({ cards: cards });
+    this.setState({ cards: cards, cardsFlipped: 0 });
   }
 
   checkForWin() {
-    if (
-      !this.state.gameWon &&
-      this.matchedCards().length === Math.floor(this.state.deckSize / 2) * 2
-    ) {
+    if (!this.state.gameWon && allPairsMatched(this.state.cards)) {
       this.setState({ msg: "You Win!", gameWon: true });
       fireConfetti();
     }
   }
 
   componentDidMount() {
-    this.setState({ cards: this.drawNewCards() });
-    this.shuffleCards();
+    this.handleShuffle();
   }
 
   componentDidUpdate() {
@@ -152,11 +97,19 @@ class Game extends React.Component {
   }
 
   render() {
+    // FIXME: Disabling this until we can refactor to a functional component
+    // const { loading } = useAuth0();
+    // if (loading) {
+    //   return <div>Loading...</div>;
+    // }
     return (
       <div>
+        <header>
+          <NavBar />
+        </header>
         <h1>{this.state.msg}</h1>
         <button onClick={this.startOver}>Start Over?</button>
-        <button onClick={this.shuffleCards}>Shuffle</button>
+        <button onClick={this.handleShuffle}>Shuffle</button>
         <button onClick={this.unflipCards}>Unflip</button>
         <div className="container">
           <Suspense fallback={<div>Loading...</div>}>
