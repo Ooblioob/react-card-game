@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from "react";
 import "./game.css";
 import _ from "lodash";
-import fireConfetti from "../util/confetti-cannon";
+import fireConfetti from "../utils/confetti-cannon";
 
 const Card = lazy(() => import("./card"));
 
