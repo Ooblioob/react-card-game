@@ -1,10 +1,9 @@
 import React, { Suspense, lazy } from "react";
-import "./App.css";
-//import Card from "./Card";
+import "./game.css";
 import _ from "lodash";
-import fireConfetti from "./confetti-cannon";
+import fireConfetti from "../util/confetti-cannon";
 
-const Card = lazy(() => import("./Card"));
+const Card = lazy(() => import("./card"));
 
 const suits = ["C", "S", "H", "D"];
 const numbers = [
@@ -24,7 +23,7 @@ const numbers = [
 ];
 const DECK = suits.map(suit => numbers.map(number => number + suit)).flat();
 
-class App extends React.Component {
+class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -177,4 +176,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default Game;
