@@ -1,8 +1,10 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import "./App.css";
-import Card from "./Card.js";
+//import Card from "./Card";
 import _ from "lodash";
-import fireConfetti from "./confetti-cannon.js";
+import fireConfetti from "./confetti-cannon";
+
+const Card = lazy(() => import("./Card"));
 
 const suits = ["C", "S", "H", "D"];
 const numbers = [
@@ -158,15 +160,17 @@ class App extends React.Component {
         <button onClick={this.shuffleCards}>Shuffle</button>
         <button onClick={this.unflipCards}>Unflip</button>
         <div className="container">
-          {this.state.cards.map((card, i) => (
-            <Card
-              key={card.id}
-              index={i}
-              value={card.value}
-              flipped={card.flipped}
-              onClicked={this.handleCardClick}
-            />
-          ))}
+          <Suspense fallback={<div>Loading...</div>}>
+            {this.state.cards.map((card, i) => (
+              <Card
+                key={card.id}
+                index={i}
+                value={card.value}
+                flipped={card.flipped}
+                onClicked={this.handleCardClick}
+              />
+            ))}
+          </Suspense>
         </div>
       </div>
     );
