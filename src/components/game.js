@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import "./game.css";
 import _ from "lodash";
 import fireConfetti from "../utils/confetti-cannon";
@@ -9,124 +9,118 @@ import { useAuth0 } from "./../react-auth0-spa";
 
 const Card = lazy(() => import("./card"));
 
-class Game extends React.Component {
-  constructor(props) {
-    super(props);
+const Game = props => {
+  const [cards, setCards] = useState(
+    shuffleCards(generateCardPairs(props.deckSize))
+  );
+  const [msg, setMsg] = useState("Play the Game!");
+  const [gameWon, setGameWon] = useState(false);
 
-    this.state = {
-      deckSize: 9,
-      cards: generateCardPairs(9),
-      cardsFlipped: 0,
-      msg: "Play the Game!",
-      gameWon: false
-    };
-    this.handleCardClick = this.handleCardClick.bind(this);
-    this.handleShuffle = this.handleShuffle.bind(this);
-    this.startOver = this.startOver.bind(this);
-    this.unflipCards = this.unflipCards.bind(this);
-  }
+  const handleShuffle = () => {
+    setCards(shuffleCards(cards));
+  };
 
-  handleShuffle() {
-    this.setState(() => {
-      return { cards: shuffleCards(this.state.cards) };
-    });
-  }
+  // TODO: Candidate for memoization?
+  const numCardsFlipped = cards => {
+    return cards.filter(card => card.flipped && !card.matched).length;
+  };
 
-  handleCardClick(index) {
-    let cards = this.state.cards.slice();
-    let card = cards[index];
-    let count = this.state.cardsFlipped;
-    if (!card.flipped && !card.matched && count < 2) {
-      card.flipped = true;
-      this.setState({ cards: cards, cardsFlipped: count + 1 });
+  const handleCardClick = index => {
+    let newCards = cards.slice();
+    let newCard = newCards[index];
+    if (!newCard.flipped && !newCard.matched && numCardsFlipped(newCards) < 2) {
+      newCard.flipped = true;
+      setCards(newCards);
     }
-  }
+  };
 
-  checkForMatches() {
-    if (cardsMatch(this.state.cards)) {
-      let cards = this.state.cards.slice();
+  const checkForMatches = () => {
+    if (cardsMatch(cards)) {
+      let newCards = cards.slice();
       // all flipped cards are a match, so we can take this shortcut
-      cards.forEach(e => {
+      newCards.forEach(e => {
         e.matched = e.flipped;
       });
-      this.setState({ cards: cards });
-    } else if (this.state.cardsFlipped > 1) {
+      setCards(newCards);
+    } else if (numCardsFlipped(cards) > 1) {
       _.delay(() => {
-        let cards = this.state.cards.slice();
+        let newCards = cards.slice();
         // only unflip the non-matched cards
-        cards.forEach(e => (e.flipped = e.matched));
-        this.setState({ cards: cards, cardsFlipped: 0 });
+        newCards.forEach(e => (e.flipped = e.matched));
+        setCards(newCards);
       }, 1000);
     }
-  }
+  };
 
-  startOver() {
-    this.unflipCards();
+  const startOver = () => {
+    unflipCards();
     _.delay(() => {
-      this.setState({
-        cards: generateCardPairs(this.state.deckSize),
-        gameWon: false,
-        msg: "Play the Game!"
-      });
+      setCards(generateCardPairs(this.state.deckSize));
+      setGameWon(false);
+      setMsg("Play the Game!");
     }, 1000);
-  }
+  };
 
-  unflipCards() {
-    let cards = this.state.cards.slice().map(e => {
+  const unflipCards = () => {
+    let newCards = cards.slice().map(e => {
       e.flipped = false;
       e.matched = false;
       return e;
     });
-    this.setState({ cards: cards, cardsFlipped: 0 });
-  }
+    setCards(newCards);
+  };
 
-  checkForWin() {
-    if (!this.state.gameWon && allPairsMatched(this.state.cards)) {
-      this.setState({ msg: "You Win!", gameWon: true });
-      fireConfetti();
+  const checkForWin = () => {
+    if (!gameWon && allPairsMatched(cards)) {
+      _.delay(() => {
+        setGameWon(true);
+        setMsg("You Win!");
+        fireConfetti();
+      }, 1000);
     }
-  }
+  };
 
-  componentDidMount() {
-    this.handleShuffle();
-  }
+  useEffect(() => {
+    checkForMatches();
+  });
 
-  componentDidUpdate() {
-    this.checkForMatches();
-    this.checkForWin();
-  }
+  useEffect(() => {
+    checkForWin();
+  });
 
-  render() {
-    // FIXME: Disabling this until we can refactor to a functional component
-    // const { loading } = useAuth0();
-    // if (loading) {
-    //   return <div>Loading...</div>;
-    // }
-    return (
-      <div>
-        <header>
-          <NavBar />
-        </header>
-        <h1>{this.state.msg}</h1>
-        <button onClick={this.startOver}>Start Over?</button>
-        <button onClick={this.handleShuffle}>Shuffle</button>
-        <button onClick={this.unflipCards}>Unflip</button>
-        <div className="container">
-          <Suspense fallback={<div>Loading...</div>}>
-            {this.state.cards.map((card, i) => (
-              <Card
-                key={card.id}
-                index={i}
-                value={card.value}
-                flipped={card.flipped}
-                onClicked={this.handleCardClick}
-              />
-            ))}
-          </Suspense>
-        </div>
+  // FIXME: Disabling this until we can refactor to a functional component
+  // const { loading } = useAuth0();
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
+  return (
+    <div>
+      <header>
+        <NavBar />
+      </header>
+      <h1>{msg}</h1>
+      <button onClick={startOver}>Start Over?</button>
+      <button onClick={handleShuffle}>Shuffle</button>
+      <button onClick={unflipCards}>Unflip</button>
+      <div className="container">
+        <Suspense fallback={<div>Loading...</div>}>
+          {cards.map((card, i) => (
+            <Card
+              key={card.id}
+              index={i}
+              value={card.value}
+              flipped={card.flipped}
+              onClicked={handleCardClick}
+            />
+          ))}
+        </Suspense>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
+
+Game.defaultProps = {
+  deckSize: 9
+};
 
 export default Game;
