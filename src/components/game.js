@@ -15,6 +15,7 @@ const Game = props => {
   );
   const [msg, setMsg] = useState("Play the Game!");
   const [gameWon, setGameWon] = useState(false);
+  const { loading } = useAuth0();
 
   const handleShuffle = () => {
     setCards(shuffleCards(cards));
@@ -88,11 +89,10 @@ const Game = props => {
     checkForWin();
   });
 
-  // FIXME: Disabling this until we can refactor to a functional component
-  // const { loading } = useAuth0();
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div>
       <header>
