@@ -4,7 +4,6 @@ import _ from "lodash";
 import fireConfetti from "../utils/confetti-cannon";
 import { generateCardPairs, shuffleCards } from "../utils/deck";
 import { cardsMatch, allPairsMatched } from "../utils/game-engine";
-import NavBar from "./NavBar";
 import { useAuth0 } from "./../react-auth0-spa";
 
 const Card = lazy(() => import("./card"));
@@ -56,7 +55,7 @@ const Game = props => {
   const startOver = () => {
     unflipCards();
     _.delay(() => {
-      setCards(generateCardPairs(this.state.deckSize));
+      setCards(shuffleCards(generateCardPairs(props.deckSize)));
       setGameWon(false);
       setMsg("Play the Game!");
     }, 1000);
@@ -94,10 +93,7 @@ const Game = props => {
   }
 
   return (
-    <div>
-      <header>
-        <NavBar />
-      </header>
+    <div className="w3-center">
       <h1>{msg}</h1>
       <button onClick={startOver}>Start Over?</button>
       <button onClick={handleShuffle}>Shuffle</button>
