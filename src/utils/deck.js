@@ -16,10 +16,13 @@ const numbers = [
   "K",
   "A"
 ];
-const DECK = suits.map(suit => numbers.map(number => number + suit)).flat();
+export const DECK = suits.map(suit => numbers.map(number => number + suit)).flat();
 export const randomCard = (exclusions = []) => {
   let availableCards = DECK.filter(e => !exclusions.includes(e));
+  if (availableCards.length === 0) 
+    throw Error(`No cards left, all cards were excluded. Exclusions: [${exclusions}]`);  
   return availableCards[_.random(availableCards.length - 1)];
+  
 }
 
 export const generateCardPairs = n => {
@@ -30,7 +33,7 @@ export const generateCardPairs = n => {
       id: i,
       value:
         i % 2 === 0
-          ? randomCard(cards.map(() => cards.value))
+          ? exports.randomCard(cards.map(() => cards.value))
           : cards[i - 1].value,
       flipped: false,
       matched: false
