@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/react-card-game/static/css/main.21e6a027.chunk.css",
-    "main.js": "/react-card-game/static/js/main.673dd447.chunk.js",
-    "main.js.map": "/react-card-game/static/js/main.673dd447.chunk.js.map",
+    "main.js": "/react-card-game/static/js/main.8684c7b2.chunk.js",
+    "main.js.map": "/react-card-game/static/js/main.8684c7b2.chunk.js.map",
     "runtime-main.js": "/react-card-game/static/js/runtime-main.4ab1eea0.js",
     "runtime-main.js.map": "/react-card-game/static/js/runtime-main.4ab1eea0.js.map",
     "static/css/2.37b88233.chunk.css": "/react-card-game/static/css/2.37b88233.chunk.css",
@@ -11,7 +11,7 @@
     "static/js/3.70f2bbce.chunk.js": "/react-card-game/static/js/3.70f2bbce.chunk.js",
     "static/js/3.70f2bbce.chunk.js.map": "/react-card-game/static/js/3.70f2bbce.chunk.js.map",
     "index.html": "/react-card-game/index.html",
-    "precache-manifest.89398e85168e55de67ce4d54affe54d5.js": "/react-card-game/precache-manifest.89398e85168e55de67ce4d54affe54d5.js",
+    "precache-manifest.87b9ff55bcefa346413df33d8cc57105.js": "/react-card-game/precache-manifest.87b9ff55bcefa346413df33d8cc57105.js",
     "service-worker.js": "/react-card-game/service-worker.js",
     "static/css/2.37b88233.chunk.css.map": "/react-card-game/static/css/2.37b88233.chunk.css.map",
     "static/css/main.21e6a027.chunk.css.map": "/react-card-game/static/css/main.21e6a027.chunk.css.map",
@@ -79,6 +79,6 @@
     "static/js/runtime-main.4ab1eea0.js",
     "static/js/3.70f2bbce.chunk.js",
     "static/css/main.21e6a027.chunk.css",
-    "static/js/main.673dd447.chunk.js"
+    "static/js/main.8684c7b2.chunk.js"
   ]
 }
