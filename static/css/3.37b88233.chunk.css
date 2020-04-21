@@ -1,0 +1,2 @@
+.card{height:30%;width:30%;margin-top:auto;margin-bottom:auto;position:relative;transition:transform 1s;transform-style:preserve-3d}.back,.front{position:absolute;top:0;left:0;height:100%;width:100%;-webkit-backface-visibility:hidden;backface-visibility:hidden}.front{z-index:2}.back img,.front img{height:inherit}.back,.card.isFlipped{transform:rotateY(180deg)}
+/*# sourceMappingURL=3.37b88233.chunk.css.map */
