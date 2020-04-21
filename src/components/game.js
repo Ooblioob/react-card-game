@@ -8,7 +8,7 @@ import { useAuth0 } from "./../react-auth0-spa";
 
 const Card = lazy(() => import("./card"));
 
-const Game = props => {
+const Game = (props) => {
   const [cards, setCards] = useState(
     shuffleCards(generateCardPairs(props.deckSize))
   );
@@ -21,11 +21,11 @@ const Game = props => {
   };
 
   // TODO: Candidate for memoization?
-  const numCardsFlipped = cards => {
-    return cards.filter(card => card.flipped && !card.matched).length;
+  const numCardsFlipped = (cards) => {
+    return cards.filter((card) => card.flipped && !card.matched).length;
   };
 
-  const handleCardClick = index => {
+  const handleCardClick = (index) => {
     let newCards = cards.slice();
     let newCard = newCards[index];
     if (!newCard.flipped && !newCard.matched && numCardsFlipped(newCards) < 2) {
@@ -38,7 +38,7 @@ const Game = props => {
     if (cardsMatch(cards)) {
       let newCards = cards.slice();
       // all flipped cards are a match, so we can take this shortcut
-      newCards.forEach(e => {
+      newCards.forEach((e) => {
         e.matched = e.flipped;
       });
       setCards(newCards);
@@ -46,7 +46,7 @@ const Game = props => {
       _.delay(() => {
         let newCards = cards.slice();
         // only unflip the non-matched cards
-        newCards.forEach(e => (e.flipped = e.matched));
+        newCards.forEach((e) => (e.flipped = e.matched));
         setCards(newCards);
       }, 1000);
     }
@@ -62,7 +62,7 @@ const Game = props => {
   };
 
   const unflipCards = () => {
-    let newCards = cards.slice().map(e => {
+    let newCards = cards.slice().map((e) => {
       e.flipped = false;
       e.matched = false;
       return e;
@@ -116,7 +116,7 @@ const Game = props => {
 };
 
 Game.defaultProps = {
-  deckSize: 9
+  deckSize: 9,
 };
 
 export default Game;

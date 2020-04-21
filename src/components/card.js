@@ -6,7 +6,8 @@ export default function Card(props) {
     props.onClicked(props.index); // call the parent's click handler
   };
 
-  const imageSrc = "img/cards/" + props.value + ".jpg";
+  // TODO Come back and fix this prefixing properly! 
+  const imageSrc = "react-card-game/img/cards/" + props.value + ".jpg";
 
   return (
     <div
@@ -14,7 +15,7 @@ export default function Card(props) {
       className={["card", props.flipped ? "isFlipped" : ""].join(" ")}
     >
       <div className="front">
-        <img src="img/cards/red_back.jpg" alt="front of card" />
+        <img src="/react-card-game/img/cards/red_back.jpg" alt="front of card" />
       </div>
       <div className="back">
         <img src={imageSrc} alt="back of card" />
