@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.com/Ooblioob/react-card-game.svg?branch=master)](https://travis-ci.com/Ooblioob/react-card-game)
 [![codecov](https://codecov.io/gh/Ooblioob/react-card-game/branch/master/graph/badge.svg)](https://codecov.io/gh/Ooblioob/react-card-game)
+![Dependencies](https://img.shields.io/david/ooblioob/react-card-game)
+![Dev Dependencies](https://img.shields.io/david/dev/ooblioob/react-card-game)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
