@@ -4,6 +4,11 @@
 ![Dependencies](https://img.shields.io/david/ooblioob/react-card-game)
 ![Dev Dependencies](https://img.shields.io/david/dev/ooblioob/react-card-game)
 
+# Card Matching Game
+A simple card matching game that gave me a chance to explore React as a framework! 
+
+Check out these incredible animations: 
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
