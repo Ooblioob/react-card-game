@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.com/Ooblioob/react-card-game.svg?branch=master)](https://travis-ci.com/Ooblioob/react-card-game)
 [![codecov](https://codecov.io/gh/Ooblioob/react-card-game/branch/master/graph/badge.svg)](https://codecov.io/gh/Ooblioob/react-card-game)
+[![Maintainability](https://api.codeclimate.com/v1/badges/d1cb6dde25e3fbcd9811/maintainability)](https://codeclimate.com/github/Ooblioob/react-card-game/maintainability)
 ![Dependencies](https://img.shields.io/david/ooblioob/react-card-game)
 ![Dev Dependencies](https://img.shields.io/david/dev/ooblioob/react-card-game)
 
