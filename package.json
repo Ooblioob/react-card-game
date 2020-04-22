@@ -2,7 +2,7 @@
   "name": "react-card-game",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://ooblioob.github.io/react-card-game",
+  "homepage": "https://ooblioob.github.io/react-card-game",
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.6.5",
     "@testing-library/jest-dom": "^4.2.4",

@@ -29,28 +29,28 @@ const Sidebar = (props) => {
       <div className="w3-bar-block">
         <NavLink
           exact
-          to="/"
+          to="/react-card-game"
           activeClassName="w3-blue"
           className="w3-bar-item w3-button w3-padding"
         >
           <i className="fa fa-home fa-fw"></i> Home
         </NavLink>
         <NavLink
-          to="/instructions"
+          to="/react-card-game/instructions"
           activeClassName="w3-blue"
           className="w3-bar-item w3-button w3-padding"
         >
           <i className="fa fa-book fa-fw"></i>  Instructions
         </NavLink>
         <NavLink
-          to="/achievements"
+          to="/react-card-game/achievements"
           activeClassName="w3-blue"
           className="w3-bar-item w3-button w3-padding"
         >
           <i className="fa fa-trophy fa-fw"></i>  Achievements
         </NavLink>
         <NavLink
-          to="/settings"
+          to="/react-card-game/settings"
           activeClassName="w3-blue"
           className="w3-bar-item w3-button w3-padding"
         >

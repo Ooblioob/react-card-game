@@ -25,10 +25,16 @@ function App() {
         style={{ marginTop: "43px", marginLeft: menu ? "25%" : "0%" }}
       >
         <Switch>
-          <Route path="/" exact component={Game} />
-          <PrivateRoute path="/achievements" component={Achievements} />
-          <Route path="/settings" component={Settings} />
-          <Route path="/instructions" component={Instructions} />
+          <Route path="/react-card-game" exact component={Game} />
+          <PrivateRoute
+            path="/react-card-game/achievements"
+            component={Achievements}
+          />
+          <Route path="/react-card-game/settings" component={Settings} />
+          <Route
+            path="/react-card-game/instructions"
+            component={Instructions}
+          />
         </Switch>
       </div>
     </Router>
