@@ -95,9 +95,15 @@ const Game = (props) => {
   return (
     <div className="w3-center">
       <h1>{msg}</h1>
-      <button onClick={startOver}>Start Over?</button>
-      <button onClick={handleShuffle}>Shuffle</button>
-      <button onClick={unflipCards}>Unflip</button>
+      <button id="start-over-btn" onClick={startOver}>
+        Start Over?
+      </button>
+      <button id="shuffle-btn" onClick={handleShuffle}>
+        Shuffle
+      </button>
+      <button id="unflip-btn" onClick={unflipCards}>
+        Unflip
+      </button>
       <div className="container">
         <Suspense fallback={<div>Loading...</div>}>
           {cards.map((card, i) => (
