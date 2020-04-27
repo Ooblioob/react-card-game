@@ -1,5 +1,7 @@
 import _ from "lodash";
-import * as deck_module from "./deck"; // this is a workaround so we can mock randomCard in our tests
+
+// this is a workaround so we can mock randomCard, shuffleCards and generateCardPairs in our tests
+import * as deck_module from "./deck";
 
 const suits = ["C", "S", "H", "D"];
 const numbers = [
@@ -18,6 +20,19 @@ const numbers = [
   "A",
 ];
 
+export class CardObj {
+  constructor({ value = "2C", id = 0, flipped = false, matched = false } = {}) {
+    this.value = value;
+    this.id = id;
+    this.flipped = flipped;
+    this.matched = matched;
+  }
+
+  flip() {
+    this.flipped = !this.flipped;
+  }
+}
+
 export const DECK = suits
   .map((suit) => numbers.map((number) => number + suit))
   .flat();
@@ -35,19 +50,25 @@ export const generateCardPairs = (n) => {
   let cards = [];
   for (let i = 0; i < n; i++) {
     // ensure each card has a pair (unless odd and the last card)
-    cards.push({
-      id: i,
-      value:
-        i % 2 === 0
-          ? deck_module.randomCard(cards.map(() => cards.value))
-          : cards[i - 1].value,
-      flipped: false,
-      matched: false,
-    });
+    cards.push(
+      new CardObj({
+        id: i,
+        value:
+          i % 2 === 0
+            ? deck_module.randomCard(cards.map(() => cards.value))
+            : cards[i - 1].value,
+        flipped: false,
+        matched: false,
+      })
+    );
   }
   return cards;
 };
 
 export const shuffleCards = (cards) => {
   return _.shuffle(cards);
+};
+
+export const drawNewCards = (deckSize) => {
+  return deck_module.shuffleCards(deck_module.generateCardPairs(deckSize));
 };
