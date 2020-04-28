@@ -20,16 +20,17 @@ const numbers = [
   "A",
 ];
 
+export const CARD_STATES = {
+  unflipped: "unflipped",
+  flipped: "flipped",
+  matched: "matched"
+}
+
 export class CardObj {
-  constructor({ value = "2C", id = 0, flipped = false, matched = false } = {}) {
+  constructor({ value = "2C", id = 0, state = CARD_STATES.unflipped } = {}) {
     this.value = value;
     this.id = id;
-    this.flipped = flipped;
-    this.matched = matched;
-  }
-
-  flip() {
-    this.flipped = !this.flipped;
+    this.state = state;
   }
 }
 
@@ -57,8 +58,7 @@ export const generateCardPairs = (n) => {
           i % 2 === 0
             ? deck_module.randomCard(cards.map(() => cards.value))
             : cards[i - 1].value,
-        flipped: false,
-        matched: false,
+        state: CARD_STATES.unflipped
       })
     );
   }

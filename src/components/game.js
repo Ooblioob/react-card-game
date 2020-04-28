@@ -2,14 +2,13 @@ import React, { Suspense, lazy, useEffect, useState } from "react";
 import "./game.css";
 import _ from "lodash";
 import fireConfetti from "../utils/confetti-cannon";
-import { shuffleCards, drawNewCards } from "../utils/deck";
+import { shuffleCards, drawNewCards, CARD_STATES } from "../utils/deck";
 import { cardsMatch, numCardsFlipped } from "../utils/card-filters";
 import {
   allPairsMatched,
   flipCardAtIndex,
-  setAllCardsProperties,
-  setFlippedCardsToMatched,
-  unflipUnmatchedCards,
+  transitionState,
+  unflipAll
 } from "../utils/game-engine";
 import { useAuth0 } from "./../react-auth0-spa";
 
@@ -30,7 +29,7 @@ const Game = (props) => {
   };
 
   const handleStartOver = () => {
-    setCards(setAllCardsProperties({ flipped: false }));
+    setCards(unflipAll(cards));
     // wait for card flip animation
     _.delay(() => {
       setCards(drawNewCards(props.deckSize));
@@ -40,15 +39,15 @@ const Game = (props) => {
   };
 
   const handleUnflip = () => {
-    setCards(setAllCardsProperties({ flipped: false }));
+    setCards(unflipAll(cards));
   };
 
   const checkForMatches = () => {
     if (cardsMatch(cards)) {
-      setCards(setFlippedCardsToMatched(cards));
+      setCards(transitionState(cards, CARD_STATES.flipped, CARD_STATES.matched));
     } else if (numCardsFlipped(cards) > 1) {
       _.delay(() => {
-        setCards(unflipUnmatchedCards(cards));
+        setCards(transitionState(cards, CARD_STATES.flipped, CARD_STATES.unflipped));
       }, 1000);
     }
   };
@@ -89,7 +88,7 @@ const Game = (props) => {
               key={card.id}
               index={i}
               value={card.value}
-              flipped={card.flipped}
+              state={card.state}
               onClicked={handleCardClick}
             />
           ))}

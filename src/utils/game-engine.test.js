@@ -1,17 +1,16 @@
 import {
   allPairsMatched,
-  setAllCardsProperties,
-  setFlippedCardsToMatched,
+  transitionState,
   flipCardAtIndex,
-  unflipUnmatchedCards,
+  unflipAll
 } from "./game-engine";
-import { CardObj } from "./deck";
+import { CardObj, CARD_STATES } from "./deck";
 
 describe("allPairsMatched(cards)", () => {
-  it("returns true when every card in collection has match property of true", () => {
+  it("returns true when every card in collection is in the matched state", () => {
     const cards = [
-      new CardObj({ flipped: true, value: "7H", matched: true }),
-      new CardObj({ flipped: true, value: "7H", matched: true }),
+      new CardObj({ value: "7H", state: CARD_STATES.matched }),
+      new CardObj({ value: "7H", state: CARD_STATES.matched }),
     ];
 
     const result = allPairsMatched(cards);
@@ -21,8 +20,8 @@ describe("allPairsMatched(cards)", () => {
 
   it("returns false when not every card in collection has match property of true (length of collection is even)", () => {
     const cards = [
-      new CardObj({ flipped: true, value: "7H", matched: false }),
-      new CardObj({ flipped: true, value: "7H", matched: true }),
+      new CardObj({ value: "7H", state: CARD_STATES.flipped }),
+      new CardObj({ value: "7H", state: CARD_STATES.matched }),
     ];
 
     const result = allPairsMatched(cards);
@@ -32,9 +31,9 @@ describe("allPairsMatched(cards)", () => {
 
   it("returns true if all but one card in collection has match property of true AND length of collection is odd", () => {
     const cards = [
-      new CardObj({ flipped: true, value: "2D", matched: false }),
-      new CardObj({ flipped: true, value: "7H", matched: true }),
-      new CardObj({ flipped: true, value: "7H", matched: true }),
+      new CardObj({ value: "2D", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "7H", state: CARD_STATES.matched }),
+      new CardObj({ value: "7H", state: CARD_STATES.matched }),
     ];
 
     const result = allPairsMatched(cards);
@@ -44,29 +43,13 @@ describe("allPairsMatched(cards)", () => {
 
   it("returns true if all but one card in collection has match property of true AND length of collection is odd (multiple pairs of matching)", () => {
     const cards = [
-      new CardObj({ flipped: true, value: "2D", matched: false }),
-      new CardObj({ flipped: true, value: "7H", matched: true }),
-      new CardObj({ flipped: true, value: "7H", matched: true }),
-      new CardObj({ flipped: true, value: "AS", matched: true }),
-      new CardObj({ flipped: true, value: "AS", matched: true }),
-      new CardObj({ flipped: true, value: "QD", matched: true }),
-      new CardObj({ flipped: true, value: "QD", matched: true }),
-    ];
-
-    const result = allPairsMatched(cards);
-
-    expect(result).toBe(true);
-  });
-
-  it("ignores whether or not cards have been flipped when checking for matches", () => {
-    const cards = [
-      new CardObj({ flipped: false, value: "2D", matched: false }),
-      new CardObj({ flipped: false, value: "7H", matched: true }),
-      new CardObj({ flipped: true, value: "7H", matched: true }),
-      new CardObj({ flipped: false, value: "AS", matched: true }),
-      new CardObj({ flipped: true, value: "AS", matched: true }),
-      new CardObj({ flipped: false, value: "QD", matched: true }),
-      new CardObj({ flipped: true, value: "QD", matched: true }),
+      new CardObj({ value: "2D", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "7H", state: CARD_STATES.matched }),
+      new CardObj({ value: "7H", state: CARD_STATES.matched }),
+      new CardObj({ value: "AS", state: CARD_STATES.matched }),
+      new CardObj({ value: "AS", state: CARD_STATES.matched }),
+      new CardObj({ value: "QD", state: CARD_STATES.matched }),
+      new CardObj({ value: "QD", state: CARD_STATES.matched }),
     ];
 
     const result = allPairsMatched(cards);
@@ -75,181 +58,94 @@ describe("allPairsMatched(cards)", () => {
   });
 });
 
-describe("setFlippedCardsToMatched", () => {
-  it("set only the cards that are flipped to matched", () => {
+describe("transitionState", () => {
+  it("Unflipped -> Flipped: sets only the cards that are unflipped to flipped", () => {
     const cards = [
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.matched }),
     ];
 
     const expected = [
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.matched }),
     ];
 
-    const result = setFlippedCardsToMatched(cards);
+    const result = transitionState(cards, CARD_STATES.unflipped, CARD_STATES.flipped);
 
     expect(result).toEqual(expected);
   });
 
-  it("cards that are matched remain flipped", () => {
+  it("flipped -> unflipped: sets only the cards that are flipped to unflipped", () => {
     const cards = [
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.matched }),
     ];
 
     const expected = [
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.matched }),
     ];
 
-    const result = setFlippedCardsToMatched(cards);
+    const result = transitionState(cards, CARD_STATES.flipped, CARD_STATES.unflipped);
 
     expect(result).toEqual(expected);
   });
 
-  it("does nothing if none of the cards are flipped", () => {
+  it("flipped -> matched: sets only the cards that are flipped to matched", () => {
     const cards = [
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.matched }),
     ];
 
     const expected = [
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.matched }),
+      new CardObj({ value: "2C", state: CARD_STATES.matched }),
     ];
 
-    const result = setFlippedCardsToMatched(cards);
-
-    expect(result).toEqual(expected);
-  });
-
-  it("pure function - does not modify passed arguments", () => {
-    const cards = [
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-    ];
-
-    const copyOfOriginal = [
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-    ];
-
-    setFlippedCardsToMatched(cards);
-
-    expect(cards).toEqual(copyOfOriginal);
-  });
-});
-
-describe("setAllCardsProperties(cards, options={})", () => {
-  it("does nothing when empty options are passed in", () => {
-    const cards = [
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-    ];
-
-    const result = setAllCardsProperties(cards, {});
-
-    expect(result).toEqual(cards);
-  });
-
-  it("can set all cards to unflipped", () => {
-    const cards = [
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-    ];
-
-    const expected = [
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: true }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-    ];
-
-    const result = setAllCardsProperties(cards, { flipped: false });
-
-    expect(result).toEqual(expected);
-  });
-
-  it("Pure Function - does not modify passed arguments", () => {
-    const cards = [
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-    ];
-
-    const copyOfOriginal = [
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-    ];
-
-    setAllCardsProperties(cards, { flipped: false, matched: false });
-
-    expect(cards).toEqual(copyOfOriginal);
-  });
-
-  it("can set all cards to matched", () => {
-    const cards = [
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-    ];
-
-    const expected = [
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: false, matched: true }),
-    ];
-
-    const result = setAllCardsProperties(cards, { matched: true });
-
-    expect(result).toEqual(expected);
-  });
-
-  it("can set more than one property at once (e.g. flipped and matched)", () => {
-    const cards = [
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-    ];
-
-    const expected = [
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-    ];
-
-    const result = setAllCardsProperties(cards, {
-      flipped: true,
-      matched: true,
-    });
+    const result = transitionState(cards, CARD_STATES.flipped, CARD_STATES.matched);
 
     expect(result).toEqual(expected);
   });
 });
+
+
 
 describe("flipCardAtIndex(cards, index)", () => {
   it("sets flipped property to true for card at index", () => {
     const cards = [
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.matched }),
     ];
 
     const expected = [
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.matched }),
+    ];
+
+    const result = flipCardAtIndex(cards, 0);
+
+    expect(result).toEqual(expected);
+  });
+
+  it("won't flip a card if it has already in flipped state", () => {
+    const cards = [
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.matched }),
+    ];
+
+    const expected = [
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.matched }),
     ];
 
     const result = flipCardAtIndex(cards, 1);
@@ -257,53 +153,35 @@ describe("flipCardAtIndex(cards, index)", () => {
     expect(result).toEqual(expected);
   });
 
-  it("won't flip a card if it has already been flipped (i.e. flipped = true)", () => {
+  it("won't flip a card in matched state", () => {
     const cards = [
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.matched }),
     ];
 
     const expected = [
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.matched }),
     ];
 
-    const result = flipCardAtIndex(cards, 0);
+    const result = flipCardAtIndex(cards, 2);
 
     expect(result).toEqual(expected);
   });
 
-  it("won't flip a card if it is matched already (i.e. matched = true)", () => {
+  it("only flip if less than 2 cards are currently flipped", () => {
     const cards = [
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
     ];
 
     const expected = [
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-    ];
-
-    const result = flipCardAtIndex(cards, 0);
-
-    expect(result).toEqual(expected);
-  });
-
-  it("won't flip a card if more than 2 un-matchd cards are already flipped", () => {
-    const cards = [
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-    ];
-
-    const expected = [
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
     ];
 
     const result = flipCardAtIndex(cards, 2);
@@ -313,103 +191,67 @@ describe("flipCardAtIndex(cards, index)", () => {
 
   it("ignores matched cards and will flip if less than 2 unmatched cards are flipped", () => {
     const cards = [
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.matched }),
     ];
 
     const expected = [
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: true, matched: false }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.matched }),
     ];
 
-    const result = flipCardAtIndex(cards, 2);
+    const result = flipCardAtIndex(cards, 0);
 
     expect(result).toEqual(expected);
   });
 
   it("Pure function - does not modify the passed arguments", () => {
     const cards = [
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.matched }),
     ];
 
     const copyOfOriginal = [
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.matched }),
     ];
 
-    flipCardAtIndex(cards, 2);
+    flipCardAtIndex(cards, 0);
 
     expect(cards).toEqual(copyOfOriginal);
   });
 
   it("throws an error if index is out of range", () => {
     const cards = [
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.matched }),
     ];
 
     expect(() => flipCardAtIndex(cards, 3)).toThrow(Error);
   });
 });
 
-describe("unflipUnmatchedCards(cards)", () => {
-  it("unflips any cards that are not currently matching (i.e. matched=true)", () => {
+describe("unflipAll(cards)", () => {
+  it("sets the state of all the cards to unflipped", () => {
     const cards = [
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.matched }),
     ];
 
     const expected = [
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
     ];
 
-    const result = unflipUnmatchedCards(cards);
+    const result = unflipAll(cards);
 
     expect(result).toEqual(expected);
-  });
-
-  it("ignores matched cards", () => {
-    const cards = [
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: false, matched: true }),
-    ];
-
-    const expected = [
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: false, matched: true }),
-    ];
-
-    const result = unflipUnmatchedCards(cards);
-
-    expect(result).toEqual(expected);
-  });
-
-  it("Pure function - does not modify passed arguments", () => {
-    const cards = [
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-    ];
-
-    const copyOfOriginal = [
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-    ];
-
-    unflipUnmatchedCards(cards);
-
-    expect(cards).toEqual(copyOfOriginal);
-  });
-});
+  })
+})

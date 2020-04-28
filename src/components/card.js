@@ -1,5 +1,6 @@
 import React from "react";
 import "./card.css";
+import { CARD_STATES } from "../utils/deck";
 
 export default function Card(props) {
   const flipCard = (e) => {
@@ -11,7 +12,7 @@ export default function Card(props) {
   return (
     <div
       onClick={flipCard}
-      className={["card", props.flipped ? "isFlipped" : ""].join(" ")}
+      className={["card", props.state !== CARD_STATES.unflipped ? "isFlipped" : ""].join(" ")}
     >
       <div className="front">
         <img
