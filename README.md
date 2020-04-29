@@ -59,7 +59,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 npm build
 
 # Builds AND deploys to gh-pages
-npm deploy
+npm run deploy
 ```
 
 Production Environment: https://ooblioob.github.io/react-card-game
