@@ -8,7 +8,8 @@
 
 A simple card matching game that gave me a chance to explore React as a framework!
 
-Decide for yourself: the greatest card matching game ever?
+Decide for yourself: the greatest card matching game ever? 
+
 <img src="docs/gameplay_trailer.gif" alt="Card Matching Game Trailer" height="200px">
 
 ## How To Play ♠♣♥♦
