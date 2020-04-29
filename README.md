@@ -4,71 +4,79 @@
 ![Dependencies](https://img.shields.io/david/ooblioob/react-card-game)
 ![Dev Dependencies](https://img.shields.io/david/dev/ooblioob/react-card-game)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Card Matching Game
 
-## Available Scripts
+A simple card matching game that gave me a chance to explore React as a framework!
 
-In the project directory, you can run:
+Decide for yourself: the greatest card matching game ever?
+<img src="docs/gameplay_trailer.gif" alt="Card Matching Game Trailer" height="200px">
+
+## How To Play ♠♣♥♦
+
+Check out our [detailed gameplay instructions](docs/instructions.md)
+
+## Architecture 🏡
+
+Read more about some of the [design decisions](docs/Architecture.md)
+
+## Development 🎴🃏
 
 ### `npm start`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```bash
+# start development server at:
+# http://localhost:3000/react-card-game
+npm start
+```
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Localhost: http://localhost:300/react-card-game
+
+## Testing 🧪✅
 
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+# run unit tests (interactive)
+npm test
 
-### `npm run build`
+# run unit tests (CI-mode)
+npm test --watchAll=false
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# generate coverage report
+npm test -- --coverage --watchAll=false
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) from Create React App for more information.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Deployments 🚀
 
-### `npm run eject`
+### `npm build` & `npm deploy`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```bash
+# Builds a minified, optimized bundle in PRODUCTION mode
+# does NOT deploy
+npm build
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# Builds AND deploys to gh-pages
+npm deploy
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Production Environment: https://ooblioob.github.io/react-card-game
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Framework Choices 📋
 
-## Learn More
+- **Unit Testing**: Jest w/ Enzyme
+- **Linting/Style Guide**: eslint (react config)
+- **Authentication**: Auth0
+- **Routing**: React-Router
+- **Confetti**: canvas-confetti
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Contributions
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+I ❤ feedback and I'm always trying to improve my craft. If you see something I should improve, file an [issue](https://github.com/Ooblioob/react-card-game/issues)
 
-### Code Splitting
+Specifically, I'd love to improve:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+- Writing more idiomatic React/Javascript code
+- Testing more effectively
+- Balancing delightful features with code that helps me practice and improve my craft
