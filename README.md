@@ -18,7 +18,7 @@ Check out our [detailed gameplay instructions](docs/instructions.md)
 
 ## Architecture 🏡
 
-Read more about some of the [design decisions](docs/Architecture.md)
+Read more about some of the [design decisions](docs/architecture.md)
 
 ## Development 🎴🃏
 
