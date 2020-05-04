@@ -1,75 +1,12 @@
-import { randomCard, generateCardPairs, DECK, shuffleCards } from "./deck";
+import {
+  randomCard,
+  generateCardPairs,
+  DECK,
+  shuffleCards,
+  drawNewCards,
+  CardObj,
+} from "./deck";
 import _ from "lodash";
-
-const CARD_5C = {
-  id: 0,
-  value: "5C",
-  flipped: false,
-  matched: false,
-};
-
-const TWO_MATCHING_5C_CARDS = [
-  {
-    id: 0,
-    value: "5C",
-    flipped: false,
-    matched: false,
-  },
-  {
-    id: 1,
-    value: "5C",
-    flipped: false,
-    matched: false,
-  },
-];
-
-const TWO_PAIRS_OF_MATCHING_CARDS = [
-  {
-    id: 0,
-    value: "5C",
-    flipped: false,
-    matched: false,
-  },
-  {
-    id: 1,
-    value: "5C",
-    flipped: false,
-    matched: false,
-  },
-  {
-    id: 2,
-    value: "AD",
-    flipped: false,
-    matched: false,
-  },
-  {
-    id: 3,
-    value: "AD",
-    flipped: false,
-    matched: false,
-  },
-];
-
-const ONE_PAIR_MATCHING_ONE_UNMATCHED_CARD = [
-  {
-    id: 0,
-    value: "5C",
-    flipped: false,
-    matched: false,
-  },
-  {
-    id: 1,
-    value: "5C",
-    flipped: false,
-    matched: false,
-  },
-  {
-    id: 2,
-    value: "AD",
-    flipped: false,
-    matched: false,
-  },
-];
 
 describe("randomCard(exclusions=[])", () => {
   it("with no params it does not exclude any cards from the deck", () => {
@@ -117,45 +54,59 @@ describe("randomCard(exclusions=[])", () => {
 
 describe("generateCardPairs(n)", () => {
   it("generates a card with the correct properties (flipped = false, matched = false, value = {value})", () => {
-    const module = require("./deck");
-    jest.spyOn(module, "randomCard").mockReturnValue("5C");
+    jest.spyOn(require("./deck"), "randomCard").mockReturnValue("5C");
+    const expected = [new CardObj({ value: "5C" })];
 
     const result = generateCardPairs(1);
 
-    expect(result).toEqual([CARD_5C]);
+    expect(result).toEqual(expected);
   });
 
   it("generates a pair of matching cards", () => {
-    const module = require("./deck");
-    jest.spyOn(module, "randomCard").mockReturnValueOnce("5C");
+    jest.spyOn(require("./deck"), "randomCard").mockReturnValue("5C");
+    const expected = [
+      new CardObj({ id: 0, value: "5C" }),
+      new CardObj({ id: 1, value: "5C" }),
+    ];
 
     const result = generateCardPairs(2);
 
-    expect(result).toEqual(TWO_MATCHING_5C_CARDS);
+    expect(result).toEqual(expected);
   });
 
   it("generates a pair of matching cards", () => {
-    const module = require("./deck");
     jest
-      .spyOn(module, "randomCard")
+      .spyOn(require("./deck"), "randomCard")
       .mockReturnValueOnce("5C")
       .mockReturnValueOnce("AD");
 
+    const expected = [
+      new CardObj({ id: 0, value: "5C" }),
+      new CardObj({ id: 1, value: "5C" }),
+      new CardObj({ id: 2, value: "AD" }),
+      new CardObj({ id: 3, value: "AD" }),
+    ];
+
     const result = generateCardPairs(4);
 
-    expect(result).toEqual(TWO_PAIRS_OF_MATCHING_CARDS);
+    expect(result).toEqual(expected);
   });
 
   it("generates a non-matching pair when numCards is odd", () => {
-    const module = require("./deck");
     jest
-      .spyOn(module, "randomCard")
+      .spyOn(require("./deck"), "randomCard")
       .mockReturnValueOnce("5C")
       .mockReturnValueOnce("AD");
 
     const result = generateCardPairs(3);
 
-    expect(result).toEqual(ONE_PAIR_MATCHING_ONE_UNMATCHED_CARD);
+    const expected = [
+      new CardObj({ id: 0, value: "5C" }),
+      new CardObj({ id: 1, value: "5C" }),
+      new CardObj({ id: 2, value: "AD" }),
+    ];
+
+    expect(result).toEqual(expected);
   });
 
   it("all cards have matched and flipped set to false", () => {
@@ -178,7 +129,40 @@ describe("generateCardPairs(n)", () => {
 describe("shuffleCards(cards)", () => {
   it("should call lodash's shuffle cards method", () => {
     jest.spyOn(_, "shuffle");
-    shuffleCards(TWO_PAIRS_OF_MATCHING_CARDS);
+    const cards = [
+      new CardObj({ id: 0, value: "5C" }),
+      new CardObj({ id: 1, value: "5C" }),
+      new CardObj({ id: 2, value: "AD" }),
+      new CardObj({ id: 3, value: "AD" }),
+    ];
+
+    shuffleCards(cards);
     expect(_.shuffle).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("drawNewCards(deckSize)", () => {
+  it("should produce a deck of length = deckSize", () => {
+    const result = drawNewCards(9);
+
+    expect(result.length).toBe(9);
+  });
+
+  it("should produce cards that have been shuffled", () => {
+    jest.spyOn(require("./deck"), "shuffleCards");
+
+    drawNewCards(9);
+
+    expect(shuffleCards).toHaveBeenCalledTimes(1);
+  });
+
+  it("should call to generate pairs", () => {
+    const deckSize = 9;
+    jest.spyOn(require("./deck"), "generateCardPairs");
+
+    drawNewCards(deckSize);
+
+    expect(generateCardPairs).toHaveBeenCalledTimes(1);
+    expect(generateCardPairs).toHaveBeenCalledWith(deckSize);
   });
 });
