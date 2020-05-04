@@ -16,8 +16,12 @@ const onRedirectCallback = (appState) => {
       : window.location.pathname
   );
 };
+
+// TODO: Due to an unresolved issue in material-ui Drawer, had to disable
+// StrictMode until it's fixed. :( 
+// https://github.com/mui-org/material-ui/issues/13394
 ReactDOM.render(
-  <React.StrictMode>
+  <React.Fragment>
     <Auth0Provider
       domain={config.domain}
       client_id={config.clientId}
@@ -26,7 +30,7 @@ ReactDOM.render(
     >
       <App />
     </Auth0Provider>
-  </React.StrictMode>,
+  </React.Fragment>,
   document.getElementById("root")
 );
 

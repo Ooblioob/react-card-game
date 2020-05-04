@@ -4,10 +4,12 @@ import history from "./utils/history";
 import Game from "./components/game";
 import PrivateRoute from "./components/auth/privateRoute";
 import TopNav from "./components/TopNav";
-import SideBar from "./components/Sidebar";
+import MaterialSidebar from "./components/MaterialSidebar";
 import Achievements from "./components/Achievements";
 import Settings from "./components/Settings";
 import Instructions from "./components/Instructions";
+
+import {Grid } from "@material-ui/core";
 
 function App() {
   const [menu, setMenu] = useState(false);
@@ -17,26 +19,38 @@ function App() {
 
   return (
     <Router history={history}>
-      <TopNav menuClickHandler={handleMenuClick} />
-      <SideBar visible={menu} />
-      <div
-        id="main"
-        className="w3-main w3-display-container"
-        style={{ marginTop: "43px", marginLeft: menu ? "25%" : "0%" }}
-      >
-        <Switch>
-          <Route path="/react-card-game" exact component={Game} />
-          <PrivateRoute
-            path="/react-card-game/achievements"
-            component={Achievements}
-          />
-          <Route path="/react-card-game/settings" component={Settings} />
-          <Route
-            path="/react-card-game/instructions"
-            component={Instructions}
-          />
-        </Switch>
-      </div>
+      <Grid container direction="column">
+        <Grid item>
+          <TopNav menuClickHandler={handleMenuClick} />
+        </Grid>
+        <Grid item >
+          <Grid container>
+            <Grid item xs={0} sm={3}> 
+              <MaterialSidebar visible={menu} menuClickHandler={handleMenuClick} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              {/* <div
+                id="main"
+                className="w3-main w3-display-container"
+                style={{ marginTop: "43px", marginLeft: menu ? "25%" : "0%" }}
+              > */}
+                <Switch>
+                  <Route path="/react-card-game" exact component={Game} />
+                  <PrivateRoute
+                    path="/react-card-game/achievements"
+                    component={Achievements}
+                  />
+                  <Route path="/react-card-game/settings" component={Settings} />
+                  <Route
+                    path="/react-card-game/instructions"
+                    component={Instructions}
+                  />
+                </Switch>
+              {/* </div> */}
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
     </Router>
   );
 }
