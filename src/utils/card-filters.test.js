@@ -1,24 +1,12 @@
 import { numCardsFlipped, cardsMatch } from "./card-filters";
-import { CardObj } from "./deck";
+import { CardObj, CARD_STATES } from "./deck";
 
 describe("numCardsFlipped(cards)", () => {
-  it("counts the number of cards that are flipped", () => {
+  it("counts only cards in the flipped state", () => {
     const cards = [
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
-    ];
-
-    const result = numCardsFlipped(cards);
-
-    expect(result).toBe(2);
-  });
-
-  it("ignores cards that are matched in the count", () => {
-    const cards = [
-      new CardObj({ value: "2C", flipped: true, matched: false }),
-      new CardObj({ value: "2C", flipped: true, matched: true }),
-      new CardObj({ value: "2C", flipped: false, matched: false }),
+      new CardObj({ value: "2C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "2C", state: CARD_STATES.matched }),
     ];
 
     const result = numCardsFlipped(cards);
@@ -38,8 +26,8 @@ describe("numCardsFlipped(cards)", () => {
 describe("cardsMatch(cards)", () => {
   it("returns false when 2 flipped cards DON'T match", () => {
     const cards = [
-      new CardObj({ flipped: true, value: "5C" }),
-      new CardObj({ flipped: true, value: "7H" }),
+      new CardObj({ value: "5C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "7H", state: CARD_STATES.flipped }),
     ];
     const result = cardsMatch(cards);
 
@@ -48,8 +36,8 @@ describe("cardsMatch(cards)", () => {
 
   it("returns true when 2 flipped cards DO match", () => {
     const cards = [
-      new CardObj({ flipped: true, value: "5C" }),
-      new CardObj({ flipped: true, value: "5C" }),
+      new CardObj({ value: "5C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "5C", state: CARD_STATES.flipped }),
     ];
     const result = cardsMatch(cards);
 
@@ -58,8 +46,8 @@ describe("cardsMatch(cards)", () => {
 
   it("returns false when there are less than 2 flipped cards", () => {
     const cards = [
-      new CardObj({ flipped: false, value: "5C" }),
-      new CardObj({ flipped: true, value: "7H" }),
+      new CardObj({ value: "5C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "5C", state: CARD_STATES.flipped }),
     ];
     const result = cardsMatch(cards);
 
@@ -68,10 +56,10 @@ describe("cardsMatch(cards)", () => {
 
   it("ignores matched cards even if they're flipped (cards match scenario)", () => {
     const cards = [
-      new CardObj({ flipped: true, value: "7H", matched: true }),
-      new CardObj({ flipped: true, value: "7H", matched: true }),
-      new CardObj({ flipped: true, value: "5C" }),
-      new CardObj({ flipped: true, value: "5C" }),
+      new CardObj({ value: "5C", state: CARD_STATES.matched }),
+      new CardObj({ value: "5C", state: CARD_STATES.matched }),
+      new CardObj({ value: "7H", state: CARD_STATES.flipped }),
+      new CardObj({ value: "7H", state: CARD_STATES.flipped }),
     ];
     const result = cardsMatch(cards);
 
@@ -80,10 +68,10 @@ describe("cardsMatch(cards)", () => {
 
   it("ignores matched cards even if they're flipped (cards don't match scenario)", () => {
     const cards = [
-      new CardObj({ flipped: true, value: "7H", matched: true }),
-      new CardObj({ flipped: true, value: "7H", matched: true }),
-      new CardObj({ flipped: true, value: "5C" }),
-      new CardObj({ flipped: true, value: "AS" }),
+      new CardObj({ value: "5C", state: CARD_STATES.matched }),
+      new CardObj({ value: "5C", state: CARD_STATES.matched }),
+      new CardObj({ value: "7H", state: CARD_STATES.flipped }),
+      new CardObj({ value: "AS", state: CARD_STATES.flipped }),
     ];
     const result = cardsMatch(cards);
 
@@ -92,10 +80,10 @@ describe("cardsMatch(cards)", () => {
 
   it("ignores unflipped cards when determining if cards are matched", () => {
     const cards = [
-      new CardObj({ flipped: false, value: "7H" }),
-      new CardObj({ flipped: false, value: "5C" }),
-      new CardObj({ flipped: true, value: "5C" }),
-      new CardObj({ flipped: true, value: "7H" }),
+      new CardObj({ value: "5C", state: CARD_STATES.unflipped }),
+      new CardObj({ value: "5C", state: CARD_STATES.flipped }),
+      new CardObj({ value: "7H", state: CARD_STATES.flipped }),
+      new CardObj({ value: "7H", state: CARD_STATES.unflipped }),
     ];
     const result = cardsMatch(cards);
 
