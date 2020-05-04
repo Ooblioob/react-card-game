@@ -56,7 +56,7 @@ export const generateCardPairs = (n) => {
         id: i,
         value:
           i % 2 === 0
-            ? deck_module.randomCard(cards.map(() => cards.value))
+            ? deck_module.randomCard(cards.map((card) => card.value))
             : cards[i - 1].value,
         state: CARD_STATES.unflipped
       })
