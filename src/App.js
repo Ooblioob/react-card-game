@@ -28,25 +28,20 @@ function App() {
             <Grid item xs={0} sm={3}> 
               <MaterialSidebar visible={menu} menuClickHandler={handleMenuClick} />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              {/* <div
-                id="main"
-                className="w3-main w3-display-container"
-                style={{ marginTop: "43px", marginLeft: menu ? "25%" : "0%" }}
-              > */}
-                <Switch>
-                  <Route path="/react-card-game" exact component={Game} />
-                  <PrivateRoute
-                    path="/react-card-game/achievements"
-                    component={Achievements}
-                  />
-                  <Route path="/react-card-game/settings" component={Settings} />
-                  <Route
-                    path="/react-card-game/instructions"
-                    component={Instructions}
-                  />
-                </Switch>
-              {/* </div> */}
+            <Grid item xs={0} sm={1}></Grid>
+            <Grid item xs={12} sm={4}>
+              <Switch>
+                <Route path="/react-card-game" exact component={Game} />
+                <PrivateRoute
+                  path="/react-card-game/achievements"
+                  component={Achievements}
+                />
+                <Route path="/react-card-game/settings" component={Settings} />
+                <Route
+                  path="/react-card-game/instructions"
+                  component={Instructions}
+                />
+              </Switch>
             </Grid>
           </Grid>
         </Grid>
