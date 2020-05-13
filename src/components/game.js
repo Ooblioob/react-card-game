@@ -144,39 +144,9 @@ const Game = ({ deckSize }) => {
         justify="center"
         style={{ marginBottom: "5px" }}
       >
-        <Grid item>
-          <Button
-            id="start-over-btn"
-            variant="contained"
-            color="default"
-            size="small"
-            onClick={handleStartOver}
-          >
-            Start Over?
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            id="shuffle-btn"
-            variant="contained"
-            color="default"
-            size="small"
-            onClick={handleShuffle}
-          >
-            Shuffle
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            id="unflip-btn"
-            variant="contained"
-            color="default"
-            size="small"
-            onClick={handleUnflip}
-          >
-            Unflip
-          </Button>
-        </Grid>
+        <StartOverBtn handleStartOver={handleStartOver} />
+        <ShuffleBtn handleShuffle={handleShuffle} />
+        <UnflipBtn handleUnflip={handleUnflip} />
       </Grid>
       <Grid
         container
@@ -209,6 +179,54 @@ const Game = ({ deckSize }) => {
           ))}
         </Suspense>
       </Grid>
+    </Grid>
+  );
+};
+
+const StartOverBtn = ({ handleStartOver }) => {
+  return (
+    <Grid item>
+      <Button
+        id="start-over-btn"
+        variant="contained"
+        color="default"
+        size="small"
+        onClick={handleStartOver}
+      >
+        Start Over?
+      </Button>
+    </Grid>
+  );
+};
+
+const ShuffleBtn = ({ handleShuffle }) => {
+  return (
+    <Grid item>
+      <Button
+        id="shuffle-btn"
+        variant="contained"
+        color="default"
+        size="small"
+        onClick={handleShuffle}
+      >
+        Shuffle
+      </Button>
+    </Grid>
+  );
+};
+
+const UnflipBtn = ({ handleUnflip }) => {
+  return (
+    <Grid item>
+      <Button
+        id="unflip-btn"
+        variant="contained"
+        color="default"
+        size="small"
+        onClick={handleUnflip}
+      >
+        Unflip
+      </Button>
     </Grid>
   );
 };
