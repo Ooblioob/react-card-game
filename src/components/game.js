@@ -1,4 +1,10 @@
-import React, { Suspense, lazy, useEffect, useState } from "react";
+import React, {
+  Suspense,
+  lazy,
+  useEffect,
+  useReducer,
+  useCallback,
+} from "react";
 import { Grid, Typography, Button } from "@material-ui/core";
 
 import "./game.css";
@@ -18,60 +24,109 @@ const Card = lazy(() => import("./Card/Card"));
 
 const GAME_VH = 70;
 
-const Game = (props) => {
-  const [cards, setCards] = useState(drawNewCards(props.deckSize));
-  const [msg, setMsg] = useState("Play the Game!");
-  const [gameWon, setGameWon] = useState(false);
+/*
+ * Custom hook for waiting for the card flip animation
+ */
+const useEffectWithTimeout = (cb, deps, timeout) => {
+  return useEffect(() => {
+    const timer = setTimeout(cb, timeout);
+    return () => clearTimeout(timer);
+  }, [cb, timeout, deps]);
+};
+
+/*
+ * Custom reducer to maintain the game's state
+ */
+const reducer = ({ cards, gameWon, msg }, { type, payload }) => {
+  switch (type) {
+    case "flip":
+      return { cards: flipCardAtIndex(cards, payload), gameWon, msg };
+    case "shuffle":
+      return { cards: shuffleCards(cards), gameWon, msg };
+    case "unflipAll":
+      return { cards: unflipAll(cards), gameWon, msg };
+    case "unflip":
+      return {
+        cards: transitionState(
+          cards,
+          CARD_STATES.flipped,
+          CARD_STATES.unflipped
+        ),
+        gameWon,
+        msg,
+      };
+    case "match":
+      return {
+        cards: transitionState(cards, CARD_STATES.flipped, CARD_STATES.matched),
+        gameWon,
+        msg,
+      };
+    case "reset":
+      return initializeGame(payload);
+    case "win":
+      return { cards, gameWon: true, msg: "You Win!" };
+    default:
+      break;
+  }
+};
+
+const initializeGame = (deckSize) => ({
+  cards: drawNewCards(deckSize),
+  msg: "Play the Game!",
+  gameWon: false,
+});
+
+const Game = ({ deckSize }) => {
+  const [{ cards, msg, gameWon }, dispatch] = useReducer(
+    reducer,
+    deckSize,
+    initializeGame
+  );
   const { loading } = useAuth0();
 
   const handleShuffle = () => {
-    setCards(shuffleCards(cards));
+    dispatch({ type: "shuffle" });
   };
 
-  const handleCardClick = (index) => {
-    setCards(flipCardAtIndex(cards, index));
-  };
+  const handleCardClick = useCallback((index) => {
+    dispatch({ type: "flip", payload: index });
+  }, []);
 
   const handleStartOver = () => {
-    setCards(unflipAll(cards));
+    dispatch({ type: "unflipAll" });
     // wait for card flip animation
     _.delay(() => {
-      setCards(drawNewCards(props.deckSize));
-      setGameWon(false);
-      setMsg("Play the Game!");
+      dispatch({ type: "reset", payload: deckSize });
     }, 1000);
   };
 
   const handleUnflip = () => {
-    setCards(unflipAll(cards));
+    dispatch({ type: "unflipAll" });
   };
 
-  const checkForMatches = () => {
+  const checkForMatches = useCallback(() => {
     if (cardsMatch(cards)) {
-      setCards(
-        transitionState(cards, CARD_STATES.flipped, CARD_STATES.matched)
-      );
+      dispatch({ type: "match" });
     } else if (numCardsFlipped(cards) > 1) {
-      _.delay(() => {
-        setCards(
-          transitionState(cards, CARD_STATES.flipped, CARD_STATES.unflipped)
-        );
-      }, 1000);
+      dispatch({ type: "unflip" });
     }
-  };
+  }, [cards]);
 
   const checkForWin = () => {
     if (!gameWon && allPairsMatched(cards)) {
-      _.delay(() => {
-        setGameWon(true);
-        setMsg("You Win!");
-        fireConfetti();
-      }, 1000);
+      dispatch({ type: "win" });
     }
   };
 
-  useEffect(checkForMatches);
-  useEffect(checkForWin);
+  const handleConfetti = () => {
+    if (gameWon) {
+      fireConfetti();
+    }
+  };
+
+  useEffectWithTimeout(checkForMatches, [handleCardClick], 1000);
+  useEffectWithTimeout(checkForWin, [checkForMatches], 1000);
+  useEffectWithTimeout(handleConfetti, [gameWon], 1000);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -80,21 +135,45 @@ const Game = (props) => {
   return (
     <Grid container direction="column" alignItems="center">
       <Grid item>
-        <Typography variant="h3" xs="12">{msg}</Typography>
+        <Typography variant="h3">{msg}</Typography>
       </Grid>
-      <Grid container item spacing="2" justify="center" style={{marginBottom: "5px"}}>
+      <Grid
+        container
+        item
+        spacing={2}
+        justify="center"
+        style={{ marginBottom: "5px" }}
+      >
         <Grid item>
-          <Button id="start-over-btn" variant="contained" color="default" size="small" onClick={handleStartOver}>
+          <Button
+            id="start-over-btn"
+            variant="contained"
+            color="default"
+            size="small"
+            onClick={handleStartOver}
+          >
             Start Over?
           </Button>
         </Grid>
         <Grid item>
-          <Button id="shuffle-btn" variant="contained" color="default" size="small" onClick={handleShuffle}>
+          <Button
+            id="shuffle-btn"
+            variant="contained"
+            color="default"
+            size="small"
+            onClick={handleShuffle}
+          >
             Shuffle
           </Button>
         </Grid>
         <Grid item>
-          <Button id="unflip-btn" variant="contained" color="default" size="small" onClick={handleUnflip}>
+          <Button
+            id="unflip-btn"
+            variant="contained"
+            color="default"
+            size="small"
+            onClick={handleUnflip}
+          >
             Unflip
           </Button>
         </Grid>
@@ -111,6 +190,7 @@ const Game = (props) => {
         <Suspense fallback={<div>loading...</div>}>
           {cards.map((card, i) => (
             <Grid
+              key={card.id}
               container
               item
               xs={4}

@@ -9,7 +9,7 @@ import Achievements from "./components/Achievements";
 import Settings from "./components/Settings";
 import Instructions from "./components/Instructions";
 
-import {Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 
 function App() {
   const [menu, setMenu] = useState(false);
@@ -23,12 +23,15 @@ function App() {
         <Grid item>
           <TopNav menuClickHandler={handleMenuClick} />
         </Grid>
-        <Grid item >
+        <Grid item>
           <Grid container>
-            <Grid item xs={0} sm={3}> 
-              <MaterialSidebar visible={menu} menuClickHandler={handleMenuClick} />
+            <Grid item xs={false} sm={3}>
+              <MaterialSidebar
+                visible={menu}
+                menuClickHandler={handleMenuClick}
+              />
             </Grid>
-            <Grid item xs={0} sm={1}></Grid>
+            <Grid item xs={false} sm={1}></Grid>
             <Grid item xs={12} sm={4}>
               <Switch>
                 <Route path="/react-card-game" exact component={Game} />
