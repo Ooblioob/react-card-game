@@ -7,20 +7,19 @@ import React, {
 } from "react";
 import { Grid, Typography, Button } from "@material-ui/core";
 
-import "./game.css";
 import _ from "lodash";
-import fireConfetti from "../utils/confetti-cannon";
-import { shuffleCards, drawNewCards, CARD_STATES } from "../utils/deck";
-import { cardsMatch, numCardsFlipped } from "../utils/card-filters";
+import fireConfetti from "../../utils/confetti-cannon";
+import { shuffleCards, drawNewCards, CARD_STATES } from "../../utils/deck";
+import { cardsMatch, numCardsFlipped } from "../../utils/card-filters";
 import {
   allPairsMatched,
   flipCardAtIndex,
   transitionState,
   unflipAll,
-} from "../utils/game-engine";
-import { useAuth0 } from "./../react-auth0-spa";
+} from "../../utils/game-engine";
+import { useAuth0 } from "../../react-auth0-spa";
 
-const Card = lazy(() => import("./Card/Card"));
+const Card = lazy(() => import("../Card/Card"));
 
 const GAME_VH = 70;
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Router, Route, Switch } from "react-router-dom";
 import history from "./utils/history";
-import Game from "./components/game";
+import Game from "./components/Game/Game";
 import PrivateRoute from "./components/auth/privateRoute";
 import TopNav from "./components/TopNav";
 import MaterialSidebar from "./components/MaterialSidebar";
