@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.js": "/react-card-game/static/js/main.5c3ab564.chunk.js",
-    "main.js.map": "/react-card-game/static/js/main.5c3ab564.chunk.js.map",
+    "main.js": "/react-card-game/static/js/main.0aa30d60.chunk.js",
+    "main.js.map": "/react-card-game/static/js/main.0aa30d60.chunk.js.map",
     "runtime-main.js": "/react-card-game/static/js/runtime-main.5e2f6c08.js",
     "runtime-main.js.map": "/react-card-game/static/js/runtime-main.5e2f6c08.js.map",
-    "static/js/2.ade7ad31.chunk.js": "/react-card-game/static/js/2.ade7ad31.chunk.js",
-    "static/js/2.ade7ad31.chunk.js.map": "/react-card-game/static/js/2.ade7ad31.chunk.js.map",
+    "static/js/2.6f3b3be6.chunk.js": "/react-card-game/static/js/2.6f3b3be6.chunk.js",
+    "static/js/2.6f3b3be6.chunk.js.map": "/react-card-game/static/js/2.6f3b3be6.chunk.js.map",
     "static/css/3.c5ff9345.chunk.css": "/react-card-game/static/css/3.c5ff9345.chunk.css",
     "static/js/3.698ca646.chunk.js": "/react-card-game/static/js/3.698ca646.chunk.js",
     "static/js/3.698ca646.chunk.js.map": "/react-card-game/static/js/3.698ca646.chunk.js.map",
     "static/js/4.f0021c05.chunk.js": "/react-card-game/static/js/4.f0021c05.chunk.js",
     "static/js/4.f0021c05.chunk.js.map": "/react-card-game/static/js/4.f0021c05.chunk.js.map",
     "index.html": "/react-card-game/index.html",
-    "precache-manifest.a2f5312b31401501235f0ad8b6f10246.js": "/react-card-game/precache-manifest.a2f5312b31401501235f0ad8b6f10246.js",
+    "precache-manifest.7d870de5a3e054328aa3c2c42e05d011.js": "/react-card-game/precache-manifest.7d870de5a3e054328aa3c2c42e05d011.js",
     "service-worker.js": "/react-card-game/service-worker.js",
     "static/css/3.c5ff9345.chunk.css.map": "/react-card-game/static/css/3.c5ff9345.chunk.css.map",
-    "static/js/2.ade7ad31.chunk.js.LICENSE.txt": "/react-card-game/static/js/2.ade7ad31.chunk.js.LICENSE.txt",
+    "static/js/2.6f3b3be6.chunk.js.LICENSE.txt": "/react-card-game/static/js/2.6f3b3be6.chunk.js.LICENSE.txt",
     "static/js/4.f0021c05.chunk.js.LICENSE.txt": "/react-card-game/static/js/4.f0021c05.chunk.js.LICENSE.txt",
     "static/media/10C.jpg": "/react-card-game/static/media/10C.9cd4527e.jpg",
     "static/media/10D.jpg": "/react-card-game/static/media/10D.88e8d32b.jpg",
@@ -79,7 +79,7 @@
   },
   "entrypoints": [
     "static/js/runtime-main.5e2f6c08.js",
-    "static/js/2.ade7ad31.chunk.js",
-    "static/js/main.5c3ab564.chunk.js"
+    "static/js/2.6f3b3be6.chunk.js",
+    "static/js/main.0aa30d60.chunk.js"
   ]
 }

@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "762367b2c7655ac52b0768e4236a08e0",
+    "revision": "ab305c924b0a2b6e134aabee7d1c14c4",
     "url": "/react-card-game/index.html"
   },
   {
@@ -8,12 +8,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/react-card-game/static/css/3.c5ff9345.chunk.css"
   },
   {
-    "revision": "4f6134c9db0c9b0746cc",
-    "url": "/react-card-game/static/js/2.ade7ad31.chunk.js"
+    "revision": "807704159479ec966163",
+    "url": "/react-card-game/static/js/2.6f3b3be6.chunk.js"
   },
   {
     "revision": "54b3961115b49344832426454e6a5987",
-    "url": "/react-card-game/static/js/2.ade7ad31.chunk.js.LICENSE.txt"
+    "url": "/react-card-game/static/js/2.6f3b3be6.chunk.js.LICENSE.txt"
   },
   {
     "revision": "471d9deeb086348cb1c3",
@@ -28,8 +28,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/react-card-game/static/js/4.f0021c05.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "9d48e8589ca74a60a0ea",
-    "url": "/react-card-game/static/js/main.5c3ab564.chunk.js"
+    "revision": "11316ffe797430bc20b8",
+    "url": "/react-card-game/static/js/main.0aa30d60.chunk.js"
   },
   {
     "revision": "73dda296f89fe97aec94",
