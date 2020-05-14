@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
+import { useAuth0 } from "../react-auth0-spa";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,11 +36,27 @@ const TopNav = (props) => {
         </IconButton>
         {/* TODO: find a way to remove typography below while still keeping Login pinned right */}
         <Typography variant="h6" className={classes.title}></Typography>
-        <Button color="inherit">Login</Button>
+        <LoginBtn />
       </Toolbar>
     </AppBar>
   );
 };
+
+const LoginBtn = () => {
+  const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
+
+  if (!isAuthenticated) {
+    return (
+      <Button color="inherit" onClick={() => loginWithRedirect({})}>Login</Button>
+    )
+  }
+
+  return (
+    <Button color="inherit" onClick={() => logout({ returnTo: window.location.origin + "/react-card-game" })}>Logout</Button>
+  )
+  
+
+}
 /* <div className="w3-bar w3-top w3-black w3-large" style={{ zIndex: "4" }}>
       <button
         className="w3-bar-item w3-button w3-hover-none w3-hover-text-light-grey"

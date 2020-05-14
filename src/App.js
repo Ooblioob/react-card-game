@@ -19,7 +19,7 @@ function App() {
 
   return (
     <Router history={history}>
-      <Grid container direction="column">
+      <Grid container direction="column" wrap="nowrap">
         <Grid item>
           <TopNav menuClickHandler={handleMenuClick} />
         </Grid>
