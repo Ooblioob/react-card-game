@@ -5,7 +5,13 @@ import React, {
   useReducer,
   useCallback,
 } from "react";
-import { Grid, Typography, Button } from "@material-ui/core";
+import {
+  Grid,
+  Typography,
+  Button,
+  Card as MaterialCard,
+  CardContent,
+} from "@material-ui/core";
 
 import _ from "lodash";
 import fireConfetti from "../../utils/confetti-cannon";
@@ -87,9 +93,14 @@ const Game = ({ deckSize }) => {
     dispatch({ type: "shuffle" });
   };
 
-  const handleCardClick = useCallback((index) => {
-    dispatch({ type: "flip", payload: index });
-  }, []);
+  const handleCardClick = useCallback(
+    (index) => {
+      if (!gameWon) {
+        dispatch({ type: "flip", payload: index });
+      }
+    },
+    [gameWon]
+  );
 
   const handleStartOver = () => {
     dispatch({ type: "unflipAll" });
@@ -132,53 +143,65 @@ const Game = ({ deckSize }) => {
   }
 
   return (
-    <Grid container direction="column" alignItems="center">
-      <Grid item>
-        <Typography variant="h3">{msg}</Typography>
+    <>
+      <Grid item xs={8} sm={4}>
+        <Grid container direction="column" alignItems="center">
+          <Grid item>
+            <Typography id="msg" data-refkey="msgRef" variant="h3">
+              {msg}
+            </Typography>
+          </Grid>
+          <Grid
+            container
+            item
+            spacing={2}
+            justify="center"
+            style={{ marginBottom: "5px" }}
+          >
+            <StartOverBtn handleStartOver={handleStartOver} />
+            <ShuffleBtn handleShuffle={handleShuffle} />
+            <UnflipBtn handleUnflip={handleUnflip} />
+          </Grid>
+          <Grid
+            container
+            item
+            direction="row"
+            alignItems="center"
+            justify="space-evenly"
+            xs={12}
+            style={{ borderStyle: "solid" }}
+          >
+            <Suspense fallback={<div>loading...</div>}>
+              {cards.map((card, i) => (
+                <Grid
+                  key={card.id}
+                  container
+                  item
+                  xs={4}
+                  justify="center"
+                  style={{ height: `${GAME_VH / 3.0}vh` }}
+                >
+                  <Card
+                    key={card.id}
+                    index={i}
+                    value={card.value}
+                    state={card.state}
+                    height={"inherit"}
+                    gameWon={gameWon}
+                    onClicked={handleCardClick}
+                  />
+                </Grid>
+              ))}
+            </Suspense>
+          </Grid>
+        </Grid>
       </Grid>
-      <Grid
-        container
-        item
-        spacing={2}
-        justify="center"
-        style={{ marginBottom: "5px" }}
-      >
-        <StartOverBtn handleStartOver={handleStartOver} />
-        <ShuffleBtn handleShuffle={handleShuffle} />
-        <UnflipBtn handleUnflip={handleUnflip} />
+      <Grid item xs={4}>
+        {/* <MaterialCard>
+          <CardContent>some content</CardContent>
+        </MaterialCard> */}
       </Grid>
-      <Grid
-        container
-        item
-        direction="row"
-        alignItems="center"
-        justify="space-evenly"
-        xs={12}
-        style={{ borderStyle: "solid" }}
-      >
-        <Suspense fallback={<div>loading...</div>}>
-          {cards.map((card, i) => (
-            <Grid
-              key={card.id}
-              container
-              item
-              xs={4}
-              justify="center"
-              style={{ height: `${GAME_VH / 3.0}vh` }}
-            >
-              <Card
-                key={card.id}
-                index={i}
-                value={card.value}
-                state={card.state}
-                height={`${GAME_VH / 3.0}vh`}
-                onClicked={handleCardClick}
-              />
-            </Grid>
-          ))}
-        </Suspense>
-      </Grid>
-    </Grid>
+    </>
   );
 };
 

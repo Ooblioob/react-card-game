@@ -32,20 +32,18 @@ function App() {
               />
             </Grid>
             <Grid item xs={false} sm={1}></Grid>
-            <Grid item xs={12} sm={4}>
-              <Switch>
-                <Route path="/react-card-game" exact component={Game} />
-                <PrivateRoute
-                  path="/react-card-game/achievements"
-                  component={Achievements}
-                />
-                <Route path="/react-card-game/settings" component={Settings} />
-                <Route
-                  path="/react-card-game/instructions"
-                  component={Instructions}
-                />
-              </Switch>
-            </Grid>
+            <Switch>
+              <Route path="/react-card-game" exact component={Game} />
+              <PrivateRoute
+                path="/react-card-game/achievements"
+                component={Achievements}
+              />
+              <Route path="/react-card-game/settings" component={Settings} />
+              <Route
+                path="/react-card-game/instructions"
+                component={Instructions}
+              />
+            </Switch>
           </Grid>
         </Grid>
       </Grid>
