@@ -1,35 +1,39 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "ce7af2313fadfab9115c8df4c6a3770d",
+    "revision": "c5a183c24d2ebfc98772dad3f5b5346d",
     "url": "/react-card-game/index.html"
   },
   {
-    "revision": "26e1a802b148e358ad85",
-    "url": "/react-card-game/static/css/2.37b88233.chunk.css"
+    "revision": "471d9deeb086348cb1c3",
+    "url": "/react-card-game/static/css/3.c5ff9345.chunk.css"
   },
   {
-    "revision": "0543d9b35ffcf78775e6",
-    "url": "/react-card-game/static/css/main.21e6a027.chunk.css"
+    "revision": "4f6134c9db0c9b0746cc",
+    "url": "/react-card-game/static/js/2.ade7ad31.chunk.js"
   },
   {
-    "revision": "26e1a802b148e358ad85",
-    "url": "/react-card-game/static/js/2.62779324.chunk.js"
+    "revision": "54b3961115b49344832426454e6a5987",
+    "url": "/react-card-game/static/js/2.ade7ad31.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "75ad65be41edf1353214",
-    "url": "/react-card-game/static/js/3.70f2bbce.chunk.js"
+    "revision": "471d9deeb086348cb1c3",
+    "url": "/react-card-game/static/js/3.698ca646.chunk.js"
   },
   {
-    "revision": "601708928e81de6a0992654bfa3f2122",
-    "url": "/react-card-game/static/js/3.70f2bbce.chunk.js.LICENSE.txt"
+    "revision": "e65165eda2d3304ab395",
+    "url": "/react-card-game/static/js/4.f0021c05.chunk.js"
   },
   {
-    "revision": "0543d9b35ffcf78775e6",
-    "url": "/react-card-game/static/js/main.51f2ba96.chunk.js"
+    "revision": "ef1e2f911a163acea541fe41848a41a5",
+    "url": "/react-card-game/static/js/4.f0021c05.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "07cede813c83d5b3db18",
-    "url": "/react-card-game/static/js/runtime-main.4ab1eea0.js"
+    "revision": "f79b96bac5d6c8fd370c",
+    "url": "/react-card-game/static/js/main.2f7014b4.chunk.js"
+  },
+  {
+    "revision": "73dda296f89fe97aec94",
+    "url": "/react-card-game/static/js/runtime-main.5e2f6c08.js"
   },
   {
     "revision": "9cd4527e0746cc3a4f46415f9774367c",
@@ -192,12 +196,20 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/react-card-game/static/media/AS.0d2207b7.jpg"
   },
   {
-    "revision": "af28222a077c89a95b599c6e93f16724",
-    "url": "/react-card-game/static/media/Gray_back.af28222a.jpg"
+    "revision": "f876f50da54919591840ddee088986d1",
+    "url": "/react-card-game/static/media/Blue_back.f876f50d.jpg"
+  },
+  {
+    "revision": "213741fcd43d9e7d06a065076145b8a8",
+    "url": "/react-card-game/static/media/Checkmark.213741fc.svg"
   },
   {
     "revision": "3011a3b19816f1551c389cf90a178bf6",
     "url": "/react-card-game/static/media/Green_back.3011a3b1.jpg"
+  },
+  {
+    "revision": "af28222a077c89a95b599c6e93f16724",
+    "url": "/react-card-game/static/media/Grey_back.af28222a.jpg"
   },
   {
     "revision": "aa5da60bccc1827153e7c4f1b0dbaca0",
@@ -232,6 +244,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/react-card-game/static/media/KS.715e5794.jpg"
   },
   {
+    "revision": "350b3370af88aae8353a642954cb0fb9",
+    "url": "/react-card-game/static/media/Purple_back.350b3370.jpg"
+  },
+  {
     "revision": "ebf737a28ece6375f584418a2c074d72",
     "url": "/react-card-game/static/media/QC.ebf737a2.jpg"
   },
@@ -254,13 +270,5 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "5e304aedb7d2c721272c4400041a90d7",
     "url": "/react-card-game/static/media/Yellow_back.5e304aed.jpg"
-  },
-  {
-    "revision": "f876f50da54919591840ddee088986d1",
-    "url": "/react-card-game/static/media/blue_back.f876f50d.jpg"
-  },
-  {
-    "revision": "350b3370af88aae8353a642954cb0fb9",
-    "url": "/react-card-game/static/media/purple_back.350b3370.jpg"
   }
 ]);

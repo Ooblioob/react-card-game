@@ -1,0 +1,4 @@
+/*!
+        LegoMushroom @legomushroom http://legomushroom.com
+        MIT License 2014
+       */
