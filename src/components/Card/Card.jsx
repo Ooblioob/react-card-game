@@ -16,7 +16,14 @@ const CheckMark = forwardRef((props, ref) => {
   );
 });
 
-export default function Card({ index, value, state, onClicked, gameWon }) {
+export default function Card({
+  index,
+  value,
+  state,
+  onClicked,
+  gameWon,
+  themeColor,
+}) {
   const cardRef = useRef(null);
   const checkRef = useRef(null);
   const checkAnimation = useFadeAnimation(checkRef);
@@ -47,7 +54,7 @@ export default function Card({ index, value, state, onClicked, gameWon }) {
     <>
       <div className={frontClassNames} onClick={handleClick}>
         <img
-          src={require("../../assets/img/cards/Red_back.jpg")}
+          src={require(`../../assets/img/cards/${themeColor}_back.jpg`)}
           alt="front of card"
           style={{ height: "inherit" }}
         />

@@ -81,7 +81,7 @@ const initializeGame = (deckSize) => ({
   gameWon: false,
 });
 
-const Game = ({ deckSize }) => {
+const Game = ({ deckSize, themeColor }) => {
   const [{ cards, msg, gameWon }, dispatch] = useReducer(
     reducer,
     deckSize,
@@ -188,6 +188,7 @@ const Game = ({ deckSize }) => {
                     state={card.state}
                     height={"inherit"}
                     gameWon={gameWon}
+                    themeColor={themeColor}
                     onClicked={handleCardClick}
                   />
                 </Grid>
