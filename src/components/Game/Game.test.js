@@ -1,10 +1,10 @@
 import React from "react";
 import { shallow } from "enzyme";
-import Game from "./game";
+import Game from "./Game";
 
 beforeEach(() => {
   // Mock out authentication
-  const module = require("../react-auth0-spa");
+  const module = require("../../react-auth0-spa");
   jest.spyOn(module, "useAuth0").mockReturnValue({ loading: false });
 });
 
@@ -22,10 +22,12 @@ describe("initialize the game component", () => {
   });
 
   it("renders a Start Over, Shuffle and Unflip buttons", () => {
-    const wrapper = shallow(<Game />, { suspenseFallback: false });
+    const wrapper = shallow(<Game/>);
 
-    expect(wrapper.find("#start-over-btn")).toExist();
-    expect(wrapper.find("#shuffle-btn")).toExist();
-    expect(wrapper.find("#unflip-btn")).toExist();
+    console.log(wrapper.debug());
+
+    expect(wrapper.find("StartOverBtn")).toExist();
+    expect(wrapper.find("ShuffleBtn")).toExist();
+    expect(wrapper.find("UnflipBtn")).toExist();
   });
 });
